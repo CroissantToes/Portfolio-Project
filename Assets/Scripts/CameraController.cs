@@ -7,9 +7,9 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour
 {
     [HideInInspector] public bool IsPlayerInControl;
-    [SerializeField] int YAxisMaxBound;
-    [SerializeField] int XAxisMaxBound;
-    [SerializeField] float speed;
+    [SerializeField] float YAxisMaxBound;
+    [SerializeField] float XAxisMaxBound;
+    [SerializeField] float Speed;
     private Vector2 InputVector;
     private GameObject Target;
     private PlayerInput PInput;
@@ -21,12 +21,20 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        this.transform.Translate(InputVector * Time.deltaTime * speed);
-        
+        this.transform.position = CameraMoveClamped();
     }
 
     public void OnMove(InputValue value)
     {
         InputVector = value.Get<Vector2>();
+    }
+
+    private Vector3 CameraMoveClamped()
+    {
+        float xVal = Mathf.Clamp(this.transform.position.x + (InputVector.x * Time.deltaTime * Speed), 0f, XAxisMaxBound);
+        float yVal = Mathf.Clamp(this.transform.position.y + (InputVector.y * Time.deltaTime * Speed), 0f, YAxisMaxBound);
+
+        Vector3 position = new Vector3(xVal, yVal, -10f);
+        return position;
     }
 }
