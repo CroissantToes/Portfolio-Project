@@ -44,8 +44,9 @@ public class GridMaker : EditorWindow
             {
                 GameObject NewTile = Instantiate(TilePrefab, new Vector3(x + 0.5f, y + 0.5f, -1f), Quaternion.identity, GridOrigin.transform);
                 Tile TileScript = NewTile.GetComponent<Tile>();
-                TileScript.Coordinates.x = x;
-                TileScript.Coordinates.y = y;
+                TileScript.coordinates.x = x;
+                TileScript.coordinates.y = y;
+                NewTile.name = $"Tile ({x},{y})";
             }
         }
     }
