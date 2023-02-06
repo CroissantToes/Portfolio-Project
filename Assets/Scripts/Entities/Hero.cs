@@ -31,13 +31,13 @@ public class Hero : Unit
     public void MoveToTile(Tile target)
     {
         hasMoved = true;
-        this.currentTile.isObstructed = false;
-        this.currentTile.occupant = null;
+        currentTile.isObstructed = false;
+        currentTile.occupant = null;
         DeselectUnit();
-        this.currentTile = target;
+        currentTile = target;
         target.isObstructed = true;
         target.occupant = this;
-        this.gameObject.transform.position = target.transform.position;
+        gameObject.transform.position = target.transform.position;
         TilesInRange = null;
         EndTurn();
     }
