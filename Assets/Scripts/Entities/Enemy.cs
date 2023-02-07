@@ -13,17 +13,20 @@ public class Enemy : Unit
 
     public override void SelectUnit()
     {
-        if (gameManager.state == GameState.playerturn)
+        if (GameManager.Instance.state == GameState.playerturn)
         {
-            gameManager.selectedUnit = this;
-            ShowMoveArea();
+            GameManager.Instance.selectedUnit = this;
+            HUDManager.Instance.SetSidebar(info, Health, maxHealth, MoveDistance);
+            SetMoveArea();
+            GridManager.Instance.ShowMoveArea(this);
         }
     }
 
     public override void DeselectUnit()
     {
-        gameManager.selectedUnit = null;
-        HideMoveArea();
+        GameManager.Instance.selectedUnit = null;
+        GridManager.Instance.HideMoveArea(this);
+        TilesInMoveRange = null;
     }
 
     public void StartTurn()
@@ -35,6 +38,7 @@ public class Enemy : Unit
     {
         yield return new WaitForSeconds(1f);
 
+        SetMoveArea();
         MoveToTile(LookForMove());
 
         yield return new WaitForSeconds(1f);
@@ -51,11 +55,11 @@ public class Enemy : Unit
     //Finds tile to move to
     public virtual Tile LookForMove()
     {
-        for(int i = moveDistance; i > 0; i--)
+        for(int i = MoveDistance; i > 0; i--)
         {
             Tile targetTile = null;
 
-            foreach(Tile tile in TilesInRange)
+            foreach(Tile tile in TilesInMoveRange)
             {
                 if(tile.coordinates.x == currentTile.coordinates.x 
                    && tile.coordinates.y == currentTile.coordinates.y - i 
@@ -80,19 +84,19 @@ public class Enemy : Unit
     {
         this.currentTile.isObstructed = false;
         this.currentTile.occupant = null;
-        HideMoveArea();
+        GridManager.Instance.HideMoveArea(this);
+        TilesInMoveRange = null;
         this.currentTile = target;
         target.isObstructed = true;
         target.occupant = this;
         this.gameObject.transform.position = target.transform.position;
-        TilesInRange = null;
     }
 
     //Looks for target, attacks if one found
     private void LookForAttackTarget()
     {
         Tile targetTile;
-        bool targetFound = gridManager.TilesByCoordinates.TryGetValue(new Vector2(currentTile.coordinates.x, currentTile.coordinates.y - 1f), out targetTile);
+        bool targetFound = GridManager.Instance.TilesByCoordinates.TryGetValue(new Vector2(currentTile.coordinates.x, currentTile.coordinates.y - 1f), out targetTile);
         if(targetFound == true)
         {
             if (targetTile.occupant != null && targetTile.occupant.IsHero == true)

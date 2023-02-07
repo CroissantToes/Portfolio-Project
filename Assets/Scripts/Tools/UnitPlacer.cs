@@ -15,7 +15,6 @@ public class UnitPlacer : EditorWindow
         GetWindow(typeof(UnitPlacer));
     }
 
-
     private void Awake()
     {
         Tiles = FindObjectsOfType<Tile>();

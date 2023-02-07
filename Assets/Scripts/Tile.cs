@@ -11,23 +11,18 @@ public class Tile : MonoBehaviour
     [SerializeField] private GameObject redHL;
     public Unit occupant;
     public bool isObstructed;
-    private GameManager gameManager;
-
-    private void Start()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-    }
 
     //Mouse hover over tile
     private void OnMouseEnter()
     {
         whiteHL.SetActive(true);
 
-        if (occupant != null)
+        if (occupant != null && occupant.GetType() != typeof(Barrier))
         {
-            if (gameManager.selectedUnit == null)
+            if (GameManager.Instance.selectedUnit == null)
             {
-                occupant.ShowMoveArea();
+                occupant.SetMoveArea();
+                GridManager.Instance.ShowMoveArea(occupant);
             }
         }
     }
@@ -35,11 +30,11 @@ public class Tile : MonoBehaviour
     {
         whiteHL.SetActive(false);
 
-        if (occupant != null && occupant.hasMoved == false)
+        if (occupant != null && occupant.hasMoved == false && occupant.GetType() != typeof(Barrier))
         {
-            if (gameManager.selectedUnit == null)
+            if (GameManager.Instance.selectedUnit == null)
             {
-                occupant.HideMoveArea();
+                GridManager.Instance.HideMoveArea(occupant);
             }
         }
     }
@@ -47,11 +42,11 @@ public class Tile : MonoBehaviour
     //Click on tile
     private void OnMouseUpAsButton()
     {
-        if(occupant != null)
+        if(occupant != null && occupant.GetType() != typeof(Barrier))
         {
             if(occupant.IsHero == true)
             {
-                if(gameManager.selectedUnit == occupant)
+                if(GameManager.Instance.selectedUnit == occupant)
                 {
                     occupant.DeselectUnit();
                 }
@@ -68,13 +63,13 @@ public class Tile : MonoBehaviour
     //If this tile can be moved to be a selected hero, move them here
     private void TryMove()
     {
-        if(gameManager.selectedUnit != null && gameManager.selectedUnit.IsHero == true)
+        if(GameManager.Instance.selectedUnit != null && GameManager.Instance.selectedUnit.IsHero == true)
         {
-            foreach (Tile tile in gameManager.selectedUnit.TilesInRange)
+            foreach (Tile tile in GameManager.Instance.selectedUnit.TilesInMoveRange)
             {
                 if(tile == this)
                 {
-                    Hero selectedHero = (Hero)gameManager.selectedUnit;
+                    Hero selectedHero = (Hero)GameManager.Instance.selectedUnit;
                     selectedHero.MoveToTile(this);
                     break;
                 }

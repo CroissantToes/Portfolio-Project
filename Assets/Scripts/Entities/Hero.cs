@@ -15,17 +15,18 @@ public class Hero : Unit
 
     public override void SelectUnit()
     {
-        if(gameManager.state == GameState.playerturn && canPlay == true)
+        if(GameManager.Instance.state == GameState.playerturn && canPlay == true)
         {
-            gameManager.selectedUnit = this;
-            ShowMoveArea();
+            GameManager.Instance.selectedUnit = this;
+            HUDManager.Instance.SetSidebar(info, Health, maxHealth, MoveDistance);
+            GridManager.Instance.ShowMoveArea(this);
         }
     }
 
     public override void DeselectUnit()
     {
-        gameManager.selectedUnit = null;
-        HideMoveArea();
+        GameManager.Instance.selectedUnit = null;
+        GridManager.Instance.HideMoveArea(this);
     }
 
     public void MoveToTile(Tile target)
@@ -38,13 +39,12 @@ public class Hero : Unit
         target.isObstructed = true;
         target.occupant = this;
         gameObject.transform.position = target.transform.position;
-        TilesInRange = null;
-        EndTurn();
+        //EndTurn();
     }
 
     protected override void EndTurn()
     {
         canPlay = false;
-        gameManager.RemoveHeroFromPlay(this);
+        GameManager.Instance.RemoveHeroFromPlay(this);
     }
 }

@@ -7,6 +7,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region Singleton
+    public static GameManager Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+    #endregion
+
     [Header("Game Parameters")]
     [SerializeField] int roundsUntilNextWave;
     [SerializeField] int numberOfWavesRemaining;
@@ -48,7 +63,6 @@ public class GameManager : MonoBehaviour
         foreach (Hero hero in ActiveHeroes)
         {
             heroesInPlay.Add(hero);
-            hero.SetMoveArea();
             hero.canPlay = true;
             hero.hasMoved = false;
         }
@@ -70,7 +84,6 @@ public class GameManager : MonoBehaviour
         foreach (Enemy enemy in ActiveEnemies)
         {
             enemiesInPlay.Add(enemy);
-            enemy.SetMoveArea();
             enemy.canPlay = true;
         }
 

@@ -5,34 +5,38 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    protected event EventHandler HealthUpdated;
+
     [SerializeField] protected int maxHealth;
-    public int Health { 
+    public int Health
+    {
         get
         {
             return health;
         }
         set
         {
-            if(value < 0) health = 0;
-            else if(value > maxHealth) health = maxHealth;
+            if (value < 0) health = 0;
+            else if (value > maxHealth) health = maxHealth;
             else health = value;
+            HealthUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
-    private int health;
-    protected GridManager gridManager;
-    protected GameManager gameManager;
-    [SerializeField] protected int moveDistance;
+    [SerializeField] private int health;
+    public int MoveDistance { get => _moveDistance; private set => _moveDistance = value; }
+    [SerializeField] private int _moveDistance;
     public Tile currentTile;
     public bool canPlay;
     public bool hasMoved;
+    public bool hasAttacked;
     public bool IsHero { get; protected set; }
-    public Tile[] TilesInRange { get; protected set; }
+    [SerializeField] protected UnitInfo info;
+    public Tile[] TilesInMoveRange { get; protected set; }
 
-    private void Awake()
+    private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-        gridManager = FindObjectOfType<GridManager>();
         Health = maxHealth;
+        SetMoveArea();
     }
 
     public virtual void SelectUnit()
@@ -48,35 +52,13 @@ public abstract class Unit : MonoBehaviour
         Debug.LogWarning("Not implemented in base unit class.", this);
     }
 
-    //Determines what tiles can be moved to
+    //Determines what tiles can be moved to by selected unit
     public void SetMoveArea()
     {
         Predicate<Tile> Pred = (tile) => Math.Abs(tile.coordinates.x - currentTile.coordinates.x)
                                          + Math.Abs(tile.coordinates.y - currentTile.coordinates.y)
-                                         <= moveDistance && tile.isObstructed == false;
+                                         <= MoveDistance && tile.isObstructed == false;
 
-        TilesInRange = Array.FindAll(gridManager.Tiles, Pred);
-    }
-
-    public virtual void ShowMoveArea()
-    {
-        if (gameManager.state == GameState.playerturn)
-        {
-            SetMoveArea();
-            foreach (Tile tile in TilesInRange)
-            {
-                tile.ShowBlueHL(true);
-            }
-        }
-    }
-    public virtual void HideMoveArea()
-    {
-        if (gameManager.state == GameState.playerturn)
-        {
-            foreach (Tile tile in TilesInRange)
-            {
-                tile.ShowBlueHL(false);
-            }
-        }
+        TilesInMoveRange = Array.FindAll(GridManager.Instance.Tiles, Pred);
     }
 }

@@ -10,23 +10,15 @@ public class Barrier : Unit
     void Start()
     {
         IsHero = true;
+        HealthUpdated += CheckHealth;
     }
 
-    private void Update()
+    private void CheckHealth(object sender, EventArgs e)
     {
+        HUDManager.Instance.SetBarrierHealth(Health, maxHealth);
         if (Health <= 0)
         {
             BarrierDestroyed?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    public override void ShowMoveArea()
-    {
-        return;
-    }
-
-    public override void HideMoveArea()
-    {
-        return;
     }
 }
