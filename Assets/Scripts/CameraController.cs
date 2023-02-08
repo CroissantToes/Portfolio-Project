@@ -17,7 +17,6 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         PInput = this.gameObject.GetComponent<PlayerInput>();
-        Time.timeScale = 1f;
     }
 
     private void Update()

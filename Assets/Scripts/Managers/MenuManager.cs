@@ -23,8 +23,15 @@ public class MenuManager : MonoBehaviour
     public GameObject pauseMenu = null;
     public GameObject winMenu = null;
     public GameObject loseMenu = null;
+    public GameObject storyMenu = null;
+    public GameObject tutorial = null;
     private bool win = false;
     private bool lose = false;
+
+    private void Start()
+    {
+        Time.timeScale = 0f;
+    }
 
     private void Update()
     {
@@ -57,6 +64,22 @@ public class MenuManager : MonoBehaviour
     public void ClosePauseMenu()
     {
         pauseMenu.SetActive(false);
+        UnfreezeGame();
+    }
+
+    public void CloseStoryMenu()
+    {
+        storyMenu.SetActive(false);
+    }
+
+    public void OpenTutorial()
+    {
+        tutorial.SetActive(true);
+    }
+
+    public void CloseTutorial()
+    {
+        tutorial.SetActive(false);
         UnfreezeGame();
     }
 

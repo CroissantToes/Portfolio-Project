@@ -1622,7 +1622,7 @@ MonoBehaviour:
   hpBar: {fileID: 5571941811098362016}
   makingMoveAsAction: 0
   autoAttacking: 0
-  IronWindDamage: 2
+  IronWindDamage: 1
   CleaveDamage: 4
 --- !u!114 &5571941811098362017
 MonoBehaviour:

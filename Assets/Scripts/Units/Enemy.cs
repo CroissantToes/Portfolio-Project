@@ -44,17 +44,17 @@ public class Enemy : Unit
 
     private IEnumerator PlayTurn()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
 
         SetMoveArea();
         
         LookForMove();
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
 
         LookForAttackTarget();
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
 
         EndTurn();
 

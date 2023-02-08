@@ -46,6 +46,13 @@ public class HUDManager : MonoBehaviour
     [Header("Skip Button")]
     public GameObject skipButton;
 
+    [Header("Enemy Counter")]
+    public TMP_Text enemyCounter;
+
+    [Header("Prompter")]
+    public GameObject prompter;
+    public TMP_Text prompterText;
+
     public void SetSidebar(UnitInfo info, int health, int maxHealth, int moveDistance)
     {
         selectedUnitInfo = info;
@@ -110,5 +117,21 @@ public class HUDManager : MonoBehaviour
     {
         barrierSlider.value = health;
         barrierText.text = $"{health}/{maxHealth}";
+    }
+
+    public void SetEnemyCounter(int value)
+    {
+        enemyCounter.text = $"Enemies Remaining: {value}";
+    }
+
+    public void ShowPrompter(string prompt)
+    {
+        prompterText.text = prompt;
+        prompter.SetActive(true);
+    }
+
+    public void ClosePrompter()
+    {
+        prompter.SetActive(false);
     }
 }

@@ -15,13 +15,13 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: f4d3a2bfcef08124ebb5bc13537dcdc8, type: 3}
   className: Archer
   abilityPortraits:
+  - {fileID: 21300000, guid: b123bdad4f47a734c80135e456f2d162, type: 3}
   - {fileID: 21300000, guid: 8d95bcf261f259f4786a397bc66e3705, type: 3}
-  - {fileID: 21300000, guid: 530bcabb1501d8148a19a77465ecac03, type: 3}
   abilityNames:
   - 'Chain Attack: Longshot'
   - Bullseye
   abilityDescriptions:
   - 'Damage: 2/The archer fires an arrow that can hit enemies between 6 and 10 spaces
-    away (inclusive).'
+    away (inclusive) in a straight line.'
   - "Damage: 4/The archer fires an arrow which pierces the enemy\u2019s skull. Hits
-    enemies between 6 and 15 spaces away (inclusive)."
+    enemies between 6 and 15 spaces away (inclusive) in a straight line."

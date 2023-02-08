@@ -99,9 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b4a513200fa33458f589333dec0cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 2
-  health: 2
-  _moveDistance: 2
+  maxHealth: 3
+  health: 3
+  _moveDistance: 3
   info: {fileID: 11400000, guid: 93081cb2892418448a898a85e3d195fe, type: 2}
   currentTile: {fileID: 0}
   state: 0
@@ -422,9 +422,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 2
+  m_MaxValue: 3
   m_WholeNumbers: 0
-  m_Value: 2
+  m_Value: 3
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

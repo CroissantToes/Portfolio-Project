@@ -43,8 +43,13 @@ public class GameManager : MonoBehaviour
         allEnemies = FindObjectsOfType<Enemy>().ToList();
         princeBarrier = FindObjectOfType<Barrier>();
         princeBarrier.BarrierDestroyed += EndGame;
-        state = GameState.playerturn;
-        StartCoroutine(RoundStart());
+        state = GameState.playerturn;;
+    }
+
+    public void StartGame()
+    {
+        HUDManager.Instance.SetEnemyCounter(allEnemies.Count);
+        StartCoroutine(PlayerTurn());
     }
 
     private void EndGame(object sender, EventArgs e)
@@ -60,8 +65,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PlayerTurn()
     {
-        Debug.Log("Player turn start");
         state = GameState.playerturn;
+
+        HUDManager.Instance.ShowPrompter("It's Your Turn!");
+
+        yield return new WaitForSeconds(1f);
+
+        HUDManager.Instance.ClosePrompter();
 
         foreach(Hero hero in allHeroes)
         {
@@ -79,8 +89,6 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitUntil(() => heroesInPlay.Count == 0);
 
-        
-        Debug.Log("Player turn end");
         StartCoroutine(EnemyTurn());
 
         yield return null;
@@ -94,9 +102,12 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitUntil(() => isOver == false);
 
-        HUDManager.Instance.HideSkipButton();
+        HUDManager.Instance.ShowPrompter("Enemy Turn...");
 
-        Debug.Log("Enemy turn start");
+        yield return new WaitForSeconds(1f);
+
+        HUDManager.Instance.ClosePrompter();
+        HUDManager.Instance.HideSkipButton();
         state = GameState.enemyturn;
 
         foreach (Enemy enemy in allEnemies)
@@ -113,7 +124,6 @@ public class GameManager : MonoBehaviour
 
         enemiesInPlay.Clear();
 
-        Debug.Log("Enemy turn end");
         StartCoroutine(RoundStart());
 
         yield return null;
@@ -151,6 +161,7 @@ public class GameManager : MonoBehaviour
 
     private bool CheckGameState()
     {
+        HUDManager.Instance.SetEnemyCounter(allEnemies.Count);
         bool isOver = false;
 
         //If all heroes are down, lose

@@ -20,4 +20,4 @@ MonoBehaviour:
   - Impale
   abilityDescriptions:
   - 'Damage: 2/The Goblin thrusts its wicked spear straight ahead, damaging anything
-    1 unit in front of it.'
+    1 space in front of it.'
