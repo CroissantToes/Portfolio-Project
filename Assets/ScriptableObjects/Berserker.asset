@@ -21,6 +21,6 @@ MonoBehaviour:
   - 'Chain Attack: Iron Wind'
   - Cleave
   abilityDescriptions:
-  - 'Damage: 2/The berserker rips through the air around them with their claymore,
+  - 'Damage: 1/The berserker rips through the air around them with their claymore,
     damaging all adjacent enemies (including diagonally).'
   - 'Damage: 4/The berserker slices into an enemy adjacent to them.'
