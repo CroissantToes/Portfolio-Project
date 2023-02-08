@@ -17,11 +17,13 @@ public class Tile : MonoBehaviour
     {
         whiteHL.SetActive(true);
 
-        if (occupant != null && occupant.GetType() != typeof(Barrier))
+        if (occupant != null && 
+           (occupant.state == UnitState.ReadyToMove || 
+           (occupant.GetType() == typeof(Enemy) && occupant.state == UnitState.Waiting)) &&
+            occupant.GetType() != typeof(Barrier))
         {
             if (GameManager.Instance.selectedUnit == null)
             {
-                occupant.SetMoveArea();
                 GridManager.Instance.ShowMoveArea(occupant);
             }
         }
@@ -30,11 +32,19 @@ public class Tile : MonoBehaviour
     {
         whiteHL.SetActive(false);
 
-        if (occupant != null && occupant.hasMoved == false && occupant.GetType() != typeof(Barrier))
+        if (occupant != null &&
+            GameManager.Instance.selectedUnit != occupant &&
+           (occupant.state == UnitState.ReadyToMove || 
+           (occupant.GetType() == typeof(Enemy) && occupant.state == UnitState.Waiting)) &&
+            occupant.GetType() != typeof(Barrier))
         {
-            if (GameManager.Instance.selectedUnit == null)
+            if(GameManager.Instance.selectedUnit == null)
             {
                 GridManager.Instance.HideMoveArea(occupant);
+            }
+            if(GameManager.Instance.selectedUnit == occupant)
+            {
+                GridManager.Instance.ShowMoveArea(occupant);
             }
         }
     }
@@ -42,11 +52,11 @@ public class Tile : MonoBehaviour
     //Click on tile
     private void OnMouseUpAsButton()
     {
-        if(occupant != null && occupant.GetType() != typeof(Barrier))
+        if(occupant != null && occupant.GetType() != typeof(Barrier) && GameManager.Instance.state == GameState.playerturn)
         {
             if(occupant.IsHero == true)
             {
-                if(GameManager.Instance.selectedUnit == occupant)
+                if(GameManager.Instance.selectedUnit == occupant && occupant.state != UnitState.MakingMove && occupant.state != UnitState.MakingAction)
                 {
                     occupant.DeselectUnit();
                 }
@@ -55,15 +65,33 @@ public class Tile : MonoBehaviour
                     occupant.SelectUnit();
                 }
             }
+            else if(occupant.IsHero == false)
+            {
+                if(GameManager.Instance.selectedUnit == null || GameManager.Instance.selectedUnit.GetType() == typeof(Enemy) || (GameManager.Instance.selectedUnit.GetType() == typeof(Hero) && (GameManager.Instance.selectedUnit.state == UnitState.ReadyToMove ||
+                   GameManager.Instance.selectedUnit.state == UnitState.ReadyToAct)))
+                {
+                    if(GameManager.Instance.selectedUnit != occupant)
+                    {
+                        occupant.SelectUnit();
+                    }
+                    else
+                    {
+                        occupant.DeselectUnit();
+                    }
+                }
+            }
         }
 
         TryMove();
+        TryAttack();
     }
 
     //If this tile can be moved to be a selected hero, move them here
     private void TryMove()
     {
-        if(GameManager.Instance.selectedUnit != null && GameManager.Instance.selectedUnit.IsHero == true)
+        if(GameManager.Instance.selectedUnit != null && 
+           GameManager.Instance.selectedUnit.IsHero == true && 
+           GameManager.Instance.selectedUnit.state == UnitState.MakingMove)
         {
             foreach (Tile tile in GameManager.Instance.selectedUnit.TilesInMoveRange)
             {
@@ -71,6 +99,32 @@ public class Tile : MonoBehaviour
                 {
                     Hero selectedHero = (Hero)GameManager.Instance.selectedUnit;
                     selectedHero.MoveToTile(this);
+                    GridManager.Instance.HideMoveArea(selectedHero);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void TryAttack()
+    {
+        Hero selectedHero = null;
+        if (GameManager.Instance.selectedUnit != null &&
+           GameManager.Instance.selectedUnit.IsHero == true)
+        {
+            selectedHero = (Hero)GameManager.Instance.selectedUnit;
+        }
+
+        if(selectedHero != null &&
+            selectedHero.state == UnitState.MakingAction &&
+            selectedHero.makingMoveAsAction == false &&
+            selectedHero.autoAttacking == false)
+        {
+            foreach (Tile tile in GameManager.Instance.selectedUnit.TilesInAttackRange)
+            {
+                if (tile == this)
+                {
+                    selectedHero.RecieveTargetPosition(coordinates);
                     break;
                 }
             }
@@ -80,5 +134,10 @@ public class Tile : MonoBehaviour
     public void ShowBlueHL(bool state)
     {
         blueHL.SetActive(state);
+    }
+
+    public void ShowRedHL(bool state)
+    {
+        redHL.SetActive(state);
     }
 }

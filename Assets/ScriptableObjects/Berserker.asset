@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e114fa937ead845b0dd277a9ea3479, type: 3}
+  m_Name: Berserker
+  m_EditorClassIdentifier: 
+  portrait: {fileID: 21300000, guid: dcc916e48961be2479fe262befbe1189, type: 3}
+  className: Berserker
+  abilityPortraits:
+  - {fileID: 21300000, guid: 2bbebcc9ca74c2c47bc5238486432710, type: 3}
+  - {fileID: 21300000, guid: 4d7635c366a76274c85747592d98d2f5, type: 3}
+  abilityNames:
+  - 'Chain Attack: Iron Wind'
+  - Cleave
+  abilityDescriptions:
+  - 'Damage: 2/The berserker rips through the air around them with their claymore,
+    damaging all adjacent enemies (including diagonally).'
+  - 'Damage: 4/The berserker slices into an enemy adjacent to them.'

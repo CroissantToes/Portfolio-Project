@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 public class UnitPlacer : EditorWindow
 {
-    private Unit unitToMove = null;
+    private Unit unitToMove;
     private Vector2 newCoordinates = new Vector2(0,0);
     private Tile[] Tiles;
     private Dictionary<Vector2, Tile> TilesByCoordinates;
@@ -13,16 +14,6 @@ public class UnitPlacer : EditorWindow
     public static void ShowWindow()
     {
         GetWindow(typeof(UnitPlacer));
-    }
-
-    private void Awake()
-    {
-        Tiles = FindObjectsOfType<Tile>();
-        TilesByCoordinates = new Dictionary<Vector2, Tile>();
-        foreach (Tile tile in Tiles)
-        {
-            TilesByCoordinates.Add(tile.coordinates, tile);
-        }
     }
 
     private void OnGUI()
@@ -38,6 +29,7 @@ public class UnitPlacer : EditorWindow
 
     private void MoveUnit(Vector2 coords)
     {
+        InitializeDictionary();
         Tile target = TilesByCoordinates[coords];
         if(unitToMove.currentTile != null)
         {
@@ -48,5 +40,15 @@ public class UnitPlacer : EditorWindow
         target.isObstructed = true;
         target.occupant = unitToMove;
         unitToMove.gameObject.transform.position = target.transform.position;
+    }
+
+    private void InitializeDictionary()
+    {
+        Tiles = FindObjectsOfType<Tile>();
+        TilesByCoordinates = new Dictionary<Vector2, Tile>();
+        foreach (Tile tile in Tiles)
+        {
+            TilesByCoordinates.Add(tile.coordinates, tile);
+        }
     }
 }
